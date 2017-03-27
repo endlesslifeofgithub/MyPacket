@@ -19,7 +19,7 @@ def simpleZeroOne(cost,value,capacity,mode):
         for ii in tempvalue:
                 answer[ii]=max(answer[ii],answer[ii-cost[i]]+value[i])
         answerlist.append(copy.deepcopy(answer))
-        print(answer)
+        #print(answer)
     answerlist=npy.array(answerlist)
     tempvalue = list(reversed(list(range(lencost))))
     packlist = []
@@ -53,12 +53,13 @@ def simpleZeroOne(cost,value,capacity,mode):
     return(tempMaxValue,packlist)
 
 if __name__=='__main__':
-    cost=[2,3,6,7,4]
+    cost=[2,3,6,7,3]
     value=[6,3,5,4,6]
-    capacity=14
+    capacity=17
     [maxvalue,packlist]=simpleZeroOne(cost,value,capacity,1)
-    print("背包容量：",capacity)
-    print("最大价值：", maxvalue)
-    print("物品序号：", list(reversed(packlist)))
-    print("物品开销",list(cost[i] for i in list(reversed(packlist))))
-    print("物品价值",list(value[i] for i in list(reversed(packlist))))
+    if len(packlist)>0:
+        print("背包容量：",capacity)
+        print("最大价值：", maxvalue)
+        print("物品序号：", list(reversed(packlist)))
+        print("物品开销",list(cost[i] for i in list(reversed(packlist))))
+        print("物品价值",list(value[i] for i in list(reversed(packlist))))
