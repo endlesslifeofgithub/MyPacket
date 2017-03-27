@@ -1,19 +1,18 @@
 # 多重背包问题 可以寻找到全局最优解
 import copy
 import numpy as npy
-cost=[2,2,6,5,4]
-value=[6,3,5,4,6]
-amount=[4,2,1,2,2]
-capacity=16
-print("背包容量：",capacity)
-def reRangePack(cost,value,amount):
+from Test01Packet1_0 import *
+
+def reRangePack(cost,value,amount): #重新组织数据，将多重背包问题转化为01背包问题，采用log优化处理
     lenAmount=len(amount)
     ThingList=list(range(lenAmount))
     for i in range(lenAmount):
         costi=cost[i]
         valuei=value[i]
         amounti=amount[i]
-        if amounti==1:
+        if amounti<=1:
+            if amounti==1:
+                amount[i]=0
             continue
         k=1             #消除原始数据的影响
         while amounti+1>pow(2,k):
@@ -27,33 +26,19 @@ def reRangePack(cost,value,amount):
         cost.append(costi*(amount[i]-pow(2,k-1)+1))
         value.append(valuei*(amount[i]-pow(2,k-1)+1))
         ThingList.append(i)
-    return(ThingList,cost,value)
-[ThingList,cost,value]=reRangePack(cost,value,amount)
-answer=list((npy.array(range(capacity+1))*0))         #并不一定装满背包
-#answer=list((npy.array(range(capacity+1))*0)+(-10000)) #必须恰好装满背包
-answer[0]=0
-lencost=len(cost)
-temp=0
-answerlist=[]
-for i in range(lencost):
-    tempvalue=list(reversed(list(range(cost[i],capacity+1))))
-    for ii in tempvalue:
-            answer[ii]=max(answer[ii],answer[ii-cost[i]]+value[i])
-    answerlist.append(copy.deepcopy(answer))
-answerlist=npy.array(answerlist)
-tempvalue=list(reversed(list(range(lencost))))
-packlist=[]
-for i in tempvalue:
-    if i==lencost-1:
-        maxvalue=max(answerlist[i])
+        amount[i] = 0
+    return(amount,ThingList,cost,value)
+
+if __name__=='__main__':
+    cost=[5,2,6,5,4]
+    value=[6,3,8,4,6]
+    amount=[1,1,2,1,1]
+    capacity=14
+    [amount,ThingList,cost,value]=reRangePack(cost,value,amount)
+    [maxvalue,packlist]=simpleZeroOne(cost,value,capacity,1)
+    if len(packlist) > 0:
+        print("背包容量：", capacity)
         print("最大价值：", maxvalue)
-        pos=npy.where(answerlist[i]==maxvalue)[0][0]
-    if maxvalue!=answerlist[i-1][pos]:
-        packlist.append(i)
-        pos=pos-cost[i]
-        maxvalue=answerlist[i-1][pos]
-if maxvalue==answerlist[0][pos]:
-    packlist.append(0)
-print("物品序号：",list(ThingList[i] for i in list(reversed(packlist))))
-print("物品开销",list(cost[i] for i in list(reversed(packlist))))
-print("物品价值",list(value[i] for i in list(reversed(packlist))))
+        print("物品序号：", list(reversed(packlist)))
+        print("物品开销", list(cost[i] for i in list(reversed(packlist))))
+        print("物品价值", list(value[i] for i in list(reversed(packlist))))

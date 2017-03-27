@@ -28,7 +28,7 @@ def simpleZeroOne(cost,value,capacity,mode):
         tempMaxValue=maxvalue
         if tempMaxValue<0:
             print("无此方案")
-            return([],[])
+            return([],[],[])
         else:
             pos=capacity
             for i in tempvalue:
@@ -38,7 +38,7 @@ def simpleZeroOne(cost,value,capacity,mode):
                     maxvalue = answerlist[i - 1][pos]
             if maxvalue == answerlist[0][pos] and maxvalue>0:
                 packlist.append(0)
-            return (tempMaxValue, packlist)
+            return (answerlist,tempMaxValue, packlist)
     for i in tempvalue:
         if i==lencost-1:
             maxvalue=max(answerlist[i])
@@ -48,15 +48,15 @@ def simpleZeroOne(cost,value,capacity,mode):
             packlist.append(i)
             pos=pos-cost[i]
             maxvalue=answerlist[i-1][pos]
-    if maxvalue==answerlist[0][pos]:
+    if maxvalue==answerlist[0][pos] and i==0:
         packlist.append(0)
-    return(tempMaxValue,packlist)
+    return(answerlist,tempMaxValue,packlist)
 
 if __name__=='__main__':
-    cost=[2,3,6,7,3]
-    value=[6,3,5,4,6]
+    cost=[1,2,3,6,7,3]
+    value=[2,6,7,5,4,6]
     capacity=17
-    [maxvalue,packlist]=simpleZeroOne(cost,value,capacity,1)
+    [lastIt,maxvalue,packlist]=simpleZeroOne(cost,value,capacity,0)
     if len(packlist)>0:
         print("背包容量：",capacity)
         print("最大价值：", maxvalue)
