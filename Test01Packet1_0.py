@@ -31,6 +31,7 @@ for i in tempvalue:
 if maxvalue==answerlist[0][pos]:
     packlist.append(0)
 print("物品序号：", list(reversed(packlist)))
+print("物品开销",list(cost[i] for i in list(reversed(packlist))))
 print("物品价值",list(value[i] for i in list(reversed(packlist))))
 
 
